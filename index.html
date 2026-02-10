@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yazılım Kariyer Rehberi 2026</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        :root {
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --accent: #3b82f6;
+            --accent-glow: rgba(59, 130, 246, 0.5);
+            --border: #334155;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --easy: #22c55e;
+            --med: #eab308;
+            --hard: #f43f5e;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            background: linear-gradient(to right, #60a5fa, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .subtitle { 
+            color: var(--text-sub); 
+            margin-bottom: 40px; 
+            text-align: center; 
+            max-width: 600px; 
+            font-size: 1rem; 
+            line-height: 1.6; 
+        }
+
+        .main-wrapper { width: 100%; max-width: 850px; }
+
+        .quiz-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.4);
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .question-header { 
+            display: flex; 
+            justify-content: space-between; 
+            margin-bottom: 20px; 
+            color: var(--text-sub); 
+            font-size: 0.9rem; 
+            font-weight: 600; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .question-text { 
+            font-size: 1.4rem; 
+            font-weight: 700; 
+            margin-bottom: 30px; 
+            color: white; 
+            min-height: 60px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+        }
+
+        .options-grid { display: grid; gap: 15px; grid-template-columns: 1fr; }
+        
+        .option-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            padding: 18px 25px;
+            border-radius: 12px;
+            color: var(--text-sub);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+            font-weight: 500;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .option-btn:hover {
+            background: rgba(59, 130, 246, 0.1);
+            color: white;
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .option-letter { 
+            background: rgba(255,255,255,0.1); 
+            width: 28px; height: 28px; 
+            border-radius: 8px; 
+            display: flex; align-items: center; justify-content: center; 
+            margin-right: 15px; font-size: 0.85rem; font-weight: bold;
+            color: white;
+        }
+
+        .progress-container { 
+            width: 100%; 
+            background: rgba(255,255,255,0.05); 
+            height: 6px; 
+            border-radius: 3px; 
+            margin-bottom: 25px; 
+            overflow: hidden; 
+        }
+        .progress-fill { 
+            height: 100%; 
+            background: linear-gradient(90deg, var(--accent), #a78bfa); 
+            width: 0%; 
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+        }
+
+        .skip-btn {
+            background: none;
+            border: none;
+            color: var(--text-sub);
+            text-decoration: underline;
+            margin-top: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        .skip-btn:hover { opacity: 1; color: var(--accent); }
+
+        .result-box {
+            display: none;
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            border: 1px solid var(--accent);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            text-align: center;
+            animation: fadeIn 0.6s ease;
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.15);
+        }
+
+        .result-title { font-size: 1.2rem; color: var(--text-sub); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        .result-match { font-size: 2.5rem; font-weight: 800; color: white; margin-bottom: 15px; text-shadow: 0 0 20px var(--accent-glow); }
+        .result-desc { color: var(--text-sub); margin-bottom: 30px; font-size: 1rem; max-width: 600px; margin-left: auto; margin-right: auto; }
+
+        .stats-grid {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .stat-item {
+            background: rgba(255,255,255,0.03);
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .stat-label { font-size: 0.75rem; color: var(--text-sub); margin-bottom: 5px; }
+        .stat-value { font-size: 1.1rem; font-weight: 700; color: var(--accent); }
+
+        .action-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        }
+        .action-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6); }
+
+        .accordion-container { display: flex; flex-direction: column; gap: 15px; opacity: 0.3; filter: blur(5px); transition: all 0.6s; pointer-events: none; }
+        .accordion-container.active { opacity: 1; filter: blur(0); pointer-events: all; }
+
+        .accordion-item {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .accordion-item:hover { border-color: #64748b; }
+        
+        .accordion-item.highlight { 
+            border-color: var(--accent); 
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.15); 
+            transform: scale(1.02); 
+            z-index: 10; 
+            position: relative;
+        }
+        .accordion-item.highlight::after {
+            content: "SANA EN UYGUN";
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--accent);
+            color: white;
+            font-size: 0.6rem;
+            font-weight: 800;
+            padding: 4px 8px;
+            border-bottom-left-radius: 8px;
+        }
+
+        .accordion-header {
+            padding: 20px 25px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            gap: 15px;
+        }
+
+        .header-left { display: flex; align-items: center; gap: 15px; font-weight: 700; font-size: 1.1rem; color: white; flex-grow: 1; }
+        .icon { font-size: 1.6rem; background: rgba(255,255,255,0.05); width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; border-radius: 10px; }
+        
+        .meta-badges { display: flex; gap: 8px; align-items: center; }
+        .badge { padding: 5px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; white-space: nowrap; }
+        
+        .badge-level { background: rgba(255,255,255,0.05); border: 1px solid transparent; }
+        .level-easy { color: var(--easy); border-color: rgba(34, 197, 94, 0.3); background: rgba(34, 197, 94, 0.05); }
+        .level-med { color: var(--med); border-color: rgba(234, 179, 8, 0.3); background: rgba(234, 179, 8, 0.05); }
+        .level-hard { color: var(--hard); border-color: rgba(244, 63, 94, 0.3); background: rgba(244, 63, 94, 0.05); }
+        
+        .badge-salary { color: #2dd4bf; background: rgba(45, 212, 191, 0.1); letter-spacing: 1px; }
+        
+        .arrow-icon { color: var(--text-sub); transition: transform 0.3s; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; }
+        .accordion-header.active .arrow-icon { transform: rotate(180deg); color: var(--accent); }
+        .accordion-header.active { background: rgba(255, 255, 255, 0.02); }
+
+        .accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0, 1, 0, 1); background: rgba(0,0,0,0.2); }
+        .content { padding: 25px; }
+
+        .advice-box {
+            background: rgba(234, 179, 8, 0.1);
+            border-left: 4px solid #ca8a04;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+            color: #f1f5f9;
+            line-height: 1.6;
+            display: flex;
+            gap: 10px;
+        }
+
+        .roadmap-group { margin-bottom: 25px; }
+        .roadmap-group:last-child { margin-bottom: 0; }
+        
+        .group-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-sub);
+            margin-bottom: 12px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .roadmap-flow { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+
+        .tech-item {
+            background: #273548;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #e2e8f0;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.2s;
+        }
+        .tech-item:hover { border-color: var(--text-sub); transform: translateY(-1px); }
+        
+        .tech-item.bonus {
+            background: rgba(16, 185, 129, 0.05);
+            color: #34d399;
+            border: 1px dashed rgba(52, 211, 153, 0.4);
+        }
+
+        .flow-separator { color: var(--text-sub); font-size: 0.9rem; opacity: 0.4; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-15px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 650px) {
+            .question-text { font-size: 1.1rem; }
+            .accordion-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .header-left { width: 100%; }
+            .meta-badges { width: 100%; justify-content: flex-start; flex-wrap: wrap; }
+            .arrow-icon { position: absolute; top: 25px; right: 20px; }
+            .stats-grid { gap: 10px; }
+            .stat-item { padding: 8px 10px; min-width: 45%; }
+            h1 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Kariyer Asistanı 2026</h1>
+    <p class="subtitle">10 soruluk testi çöz, karakterine ve çalışma tarzına en uygun yazılım alanını keşfet. Tüm veriler 2026 yılı maaş, zorluk ve trend analizleriyle sunulur.</p>
+
+    <div class="main-wrapper">
+        
+        <div class="quiz-card" id="quiz-box">
+            <div class="question-header">
+                <span id="q-counter">SORU 1 / 10</span>
+                <span style="color:var(--accent)">Analiz Ediliyor...</span>
+            </div>
+            <div class="progress-container"><div class="progress-fill" id="progress"></div></div>
+            <div class="question-text" id="question">Soru Yükleniyor...</div>
+            <div class="options-grid" id="options"></div>
+            <button class="skip-btn" onclick="testiAtla()">Testi Atla ve Tüm Listeyi Gör</button>
+        </div>
+
+        <div class="result-box" id="result-box">
+            <div class="result-title">SANA EN UYGUN ALAN</div>
+            <div class="result-match" id="top-match">Frontend Developer</div>
+            <div class="result-desc">Verdiğin cevaplara göre senin için en optimize edilmiş kariyer yolları aşağıdadır. En yüksek puanı alan seçenek senin için özel olarak vurgulanmıştır.</div>
+            <div class="stats-grid" id="stats-grid">
+            </div>
+            <button class="action-btn" onclick="detaylaraGit()">Yol Haritasını İncele ↓</button>
+        </div>
+
+        <div class="accordion-container" id="accordion-list">
+        </div>
+
+    </div>
+
+    <script>
+        const sorular = [
+            {
+                soruMetni: "1. Bir projeye başlarken seni en çok ne heyecanlandırır?",
+                secenekler: [
+                    { metin: "Ekranda hemen görebileceğim, görsel ve estetik bir arayüz tasarlamak.", puanlar: { frontend: 10, uiux: 8, mobile: 5 } },
+                    { metin: "Arka planda çalışan, verileri işleyen o görünmez ama güçlü motoru kurmak.", puanlar: { backend: 10, devops: 5, dataeng: 6 } },
+                    { metin: "Sistemlerin açığını bulmak veya güvenliğini sağlamak.", puanlar: { cyber: 10, qa: 4 } },
+                    { metin: "Fiziksel bir cihazın, robotun veya kartın kodla hayat bulması.", puanlar: { embedded: 10 } }
+                ]
+            },
+            {
+                soruMetni: "2. Hata (Bug) ayıklama sürecinde yaklaşımın nasıldır?",
+                secenekler: [
+                    { metin: "Piksel hatalarını, renk uyumsuzluğunu veya kaymaları hemen fark ederim.", puanlar: { frontend: 8, uiux: 10 } },
+                    { metin: "Logları okurum, veritabanı sorgularına bakarım, sorunun köküne inerim.", puanlar: { backend: 8, devops: 6, ai: 5 } },
+                    { metin: "Bu hatayı nasıl manipüle edebilirim? Sistemi bozup içeri sızabilir miyim?", puanlar: { qa: 8, cyber: 10 } },
+                    { metin: "Hata oyunda bir özellik (feature) olabilir, hemen yan yollar ararım :)", puanlar: { game: 10, mobile: 4 } }
+                ]
+            },
+            {
+                soruMetni: "3. Hangi çalışma ortamı sana daha 'havalı' geliyor?",
+                secenekler: [
+                    { metin: "Siyah terminal ekranı, akan yeşil yazılar ve Linux komutları.", puanlar: { cyber: 8, devops: 10, backend: 5 } },
+                    { metin: "Renkli kod editörleri, tarayıcıda anlık önizleme, modern tasarım araçları.", puanlar: { frontend: 10, uiux: 6, mobile: 6 } },
+                    { metin: "Büyük veri setleri, grafikler, istatistiksel modeller ve tahminler.", puanlar: { ai: 10, dataeng: 8, blockchain: 5 } },
+                    { metin: "Laboratuvar ortamı, devre kartları, kablolar ve sensörler.", puanlar: { embedded: 10 } }
+                ]
+            },
+            {
+                soruMetni: "4. Sonuçları ne kadar hızlı görmek istersin?",
+                secenekler: [
+                    { metin: "Anında! Kodu kaydettiğim an ekranda değişikliği görmeliyim.", puanlar: { frontend: 10, mobile: 8, uiux: 5 } },
+                    { metin: "Sabırlıyım. Modelin eğitilmesi, büyük verinin işlenmesi zaman alabilir.", puanlar: { ai: 10, dataeng: 8, game: 6 } },
+                    { metin: "Görünür bir şey olmasına gerek yok, sistem stabil ve hızlı çalışsın yeter.", puanlar: { backend: 8, devops: 8, embedded: 5 } },
+                    { metin: "Sonuçtan çok, sürecin hatasız işlemesini denetlemeyi severim.", puanlar: { qa: 10 } }
+                ]
+            },
+            {
+                soruMetni: "5. Matematik ve Algoritma ile aran nasıl?",
+                secenekler: [
+                    { metin: "Çok severim. Matrisler, olasılık ve şifreleme algoritmaları hobimdir.", puanlar: { ai: 10, blockchain: 10, game: 7, dataeng: 6 } },
+                    { metin: "Mantık kurmayı severim ama ağır matematiktense işlevsellik önemlidir.", puanlar: { backend: 8, mobile: 6, embedded: 5 } },
+                    { metin: "Matematikten çok insan psikolojisi, estetik ve kullanıcı deneyimi ilgimi çeker.", puanlar: { uiux: 10, frontend: 7, qa: 4 } },
+                    { metin: "Sistem mimarisi, ağ yapıları (IP, DNS) ve optimizasyon daha mühim.", puanlar: { devops: 10, cyber: 8 } }
+                ]
+            },
+            {
+                soruMetni: "6. Bir yazılım ekibinde olsan hangi rolü seçerdin?",
+                secenekler: [
+                    { metin: "Son kullanıcının parmağının dokunduğu o yüzü tasarlayan kişi.", puanlar: { frontend: 8, mobile: 8, uiux: 6 } },
+                    { metin: "Kodları birleştiren, sunucuları yöneten, 'bu gemi batmaz' diyen kaptan.", puanlar: { devops: 10, backend: 5 } },
+                    { metin: "Ürünü yayınlanmadan önce 'Hacker gibi' düşünüp kıran kişi.", puanlar: { cyber: 10, qa: 6 } },
+                    { metin: "Verilerden geleceğe dair strateji üreten beyin takımı.", puanlar: { ai: 10, dataeng: 8, blockchain: 5 } }
+                ]
+            },
+            {
+                soruMetni: "7. Hangi teknoloji trendi seni daha çok heyecanlandırıyor?",
+                secenekler: [
+                    { metin: "Generative AI (ChatGPT), LLM ve Otonom Sistemler.", puanlar: { ai: 10, dataeng: 5 } },
+                    { metin: "Web3, Kripto Paralar, DeFi ve Merkeziyetsizlik.", puanlar: { blockchain: 10, backend: 3 } },
+                    { metin: "IoT (Nesnelerin İnterneti), Akıllı Evler ve Giyilebilir Teknoloji.", puanlar: { embedded: 10, mobile: 4 } },
+                    { metin: "Sanal Gerçeklik (VR), Metaverse ve Yüksek Grafikli Oyunlar.", puanlar: { game: 10, mobile: 3 } }
+                ]
+            },
+            {
+                soruMetni: "8. 'Tekrar eden rutin işler' hakkında ne düşünüyorsun?",
+                secenekler: [
+                    { metin: "Nefret ederim. Hemen bir script yazarım, bilgisayar benim yerime yapsın.", puanlar: { devops: 10, qa: 5, backend: 5 } },
+                    { metin: "Sorun değil, yeter ki tasarımın her pikseli mükemmel olsun, ince işçiliği severim.", puanlar: { uiux: 10, frontend: 6 } },
+                    { metin: "Rutin yoktur, sürekli değişen saldırı yöntemleri ve savunma vardır.", puanlar: { cyber: 8 } },
+                    { metin: "Veri temizlemek sıkıcı olabilir ama sonucunda çıkacak analiz için katlanırım.", puanlar: { dataeng: 10, ai: 6 } }
+                ]
+            },
+            {
+                soruMetni: "9. Hangi platform için geliştirmek daha keyifli?",
+                secenekler: [
+                    { metin: "İnsanların elinden düşürmediği Telefonlar.", puanlar: { mobile: 10, frontend: 4 } },
+                    { metin: "Yüksek performanslı PC'ler ve Oyun Konsolları.", puanlar: { game: 10, embedded: 3 } },
+                    { metin: "Robot kollar, Drone'lar veya Araba beyinleri.", puanlar: { embedded: 10, ai: 4 } },
+                    { metin: "Görünmeyen devasa Sunucu Çiftlikleri (Cloud).", puanlar: { devops: 10, backend: 6, dataeng: 6 } }
+                ]
+            },
+            {
+                soruMetni: "10. Motivasyon kaynağın nedir?",
+                secenekler: [
+                    { metin: "Yaptığım uygulamanın markette binlerce kişi tarafından indirildiğini görmek.", puanlar: { mobile: 10, frontend: 8, game: 6 } },
+                    { metin: "Çok karmaşık bir problemi çözüp, sistemin saat gibi işlemesini izlemek.", puanlar: { backend: 10, embedded: 8, ai: 6 } },
+                    { metin: "Kurumun verilerini koruyan o görünmez kalkan olmak.", puanlar: { cyber: 10, devops: 6 } },
+                    { metin: "Yeni bir ekonomi veya finansal sistem inşa etmek.", puanlar: { blockchain: 10 } }
+                ]
+            }
+        ];
+
+        const yolHaritasiVerisi = [
+            { kod: "frontend", baslik: "Frontend Developer", ikon: "🎨", zorluk: "Orta", maas: "$$", trend: "🔥", tavsiye: "HTML/CSS/JS temelini sağlam atmadan Framework öğrenme.", bolumler: [
+                { isim: "Temel", ogeler: ["HTML5", "CSS3", "JavaScript (ES6+)"], tur: "sira" },
+                { isim: "Framework", ogeler: ["React.js", "Vue.js"], tur: "secim" },
+                { isim: "Modern CSS", ogeler: ["Tailwind CSS", "Sass"], tur: "secim" },
+                { isim: "Şirketler Ekstra İsteyebilir (+1 Puan)", ogeler: ["TypeScript", "Next.js", "Figma"], ekstraMi: true }
+            ]},
+            { kod: "backend", baslik: "Backend Developer", ikon: "⚙️", zorluk: "Zor", maas: "$$$", trend: "⚖️", tavsiye: "Dil bir araçtır. Önemli olan veritabanı ve mimari bilgisidir.", bolumler: [
+                { isim: "Dil", ogeler: ["C# (.NET)", "Java (Spring)", "Node.js", "Go"], tur: "secim" },
+                { isim: "Veritabanı", ogeler: ["PostgreSQL", "MSSQL", "MongoDB", "Redis"], tur: "secim" },
+                { isim: "Şirketler Ekstra İsteyebilir (+1 Puan)", ogeler: ["Docker", "Microservices", "Kafka"], ekstraMi: true }
+            ]},
+            { kod: "mobile", baslik: "Mobile Developer", ikon: "📱", zorluk: "Orta", maas: "$$$", trend: "📈", tavsiye: "Kendi işin için Flutter, profesyonel kurumsal iş için Native (Swift/Kotlin).", bolumler: [
+                { isim: "Platform", ogeler: ["Flutter (Cross)", "React Native (Cross)", "Swift (iOS)", "Kotlin (Android)"], tur: "secim" },
+                { isim: "Şirketler Ekstra İsteyebilir (+1 Puan)", ogeler: ["Firebase", "CI/CD", "State Management"], ekstraMi: true }
+            ]},
+            { kod: "game", baslik: "Game Developer", ikon: "🎮", zorluk: "Çok Zor", maas: "$$", trend: "⚖️", tavsiye: "Sektör zorlu. Mobil oyunlar için Unity, AAA oyunlar için Unreal öğren.", bolumler: [
+                { isim: "Motor & Dil", ogeler: ["Unity (C#)", "Unreal (C++)", "Godot"], tur: "secim" },
+                { isim: "Şirketler Ekstra İsteyebilir (+1 Puan)", ogeler: ["3D Modelleme", "Shader Graph", "Multiplayer Netcode"], ekstraMi: true }
+            ]},
+            { kod: "cyber", baslik: "Cyber Security Specialist", ikon: "🔒", zorluk: "Çok Zor", maas: "$$$", trend: "🔥", tavsiye: "Sadece araç kullanmak yetmez, sistemin (Linux/Network) nasıl çalıştığını bilmelisin.", bolumler: [
+                { isim: "Temel", ogeler: ["Network (TCP/IP)", "Linux (Kali)", "Bash/Python Script"], tur: "sira" },
+                { isim: "Alan", ogeler: ["Red Team (Offensive)", "Blue Team (Defensive)"], tur: "secim" },
+                { isim: "Şirketler Ekstra İsteyebilir (+1 Puan)", ogeler: ["OSCP Sertifikası", "Reverse Engineering", "Wireshark"], ekstraMi: true }
+            ]},
+            { kod: "ai", baslik: "AI & Data Scientist", ikon: "🧠", zorluk: "Zor", maas: "$$$$", trend: "🚀", tavsiye: "Kütüphane (Library) ezberleme, arkadaki matematiği ve istatistiği öğren.", bolumler: [
+                { isim: "Dil & Temel", ogeler: ["Python", "İstatistik", "Matematik"], tur: "sira" },
+                { isim: "Kütüphaneler", ogeler: ["Pandas", "Scikit-Learn", "PyTorch/TensorFlow"], tur: "sira" },
+                { isim: "Şirketler Ekstra İsteyebilir (+1 Puan)", ogeler: ["LLM (Large Language Models)", "RAG", "LangChain"], ekstraMi: true }
+            ]},
+            { kod: "dataeng", baslik: "Data Engineer", ikon: "🗄️", zorluk: "Zor", maas: "$$$$", trend: "📈", tavsiye: "Veri bilimcilerin analiz yapabilmesi için o büyük veriyi taşıyan boruları sen döşersin.", bolumler: [
+                { isim: "Dil", ogeler: ["Python", "Scala", "Java"], tur: "secim" },
+                { isim: "Big Data", ogeler: ["Apache Spark", "Hadoop", "Kafka"], tur: "sira" },
+                { isim: "Şirketler Ekstra İsteyebilir (+1 Puan)", ogeler: ["Airflow", "Cloud Data (Snowflake/BigQuery)", "ETL"], ekstraMi: true }
+            ]},
+            { kod: "qa", baslik: "QA Automation Engineer", ikon: "🐞", zorluk: "Kolay", maas: "$$", trend: "📈", tavsiye: "Manuel testçilik bitiyor. Kod yazabilen test mühendisi olmalısın.", bolumler: [
+                { isim: "Dil", ogeler: ["Java", "Python", "JavaScript/TS"], tur: "secim" },
+                { isim: "Otomasyon", ogeler: ["Playwright", "Selenium", "Cypress"], tur: "secim" },
+                { isim: "Şirketler Ekstra İsteyebilir (+1 Puan)", ogeler: ["API Test (Postman)", "Load Testing (JMeter)", "CI/CD Pipeline"], ekstraMi: true }
+            ]},
+            { kod: "devops", baslik: "DevOps Engineer", ikon: "☁️", zorluk: "Zor", maas: "$$$", trend: "📈", tavsiye: "Junior dostu bir alan değildir. Önce yazılım veya sistem yönetimi tecrübesi şart.", bolumler: [
+                { isim: "Cloud", ogeler: ["AWS", "Azure", "Google Cloud"], tur: "secim" },
+                { isim: "Araçlar", ogeler: ["Docker", "Kubernetes", "Terraform", "Jenkins"], tur: "sira" },
+                { isim: "Şirketler Ekstra İsteyebilir (+1 Puan)", ogeler: ["Linux SysAdmin", "Go Scripting", "Prometheus/Grafana"], ekstraMi: true }
+            ]},
+             { kod: "uiux", baslik: "UI/UX Designer", ikon: "🖌️", zorluk: "Kolay", maas: "$$", trend: "🔥", tavsiye: "Kod yazmak zorunda değilsin ama temel HTML/CSS bilmek seni yazılımcının en iyi dostu yapar.", bolumler: [
+                { isim: "Araçlar", ogeler: ["Figma", "Adobe XD", "Sketch"], tur: "secim" },
+                { isim: "Şirketler Ekstra İsteyebilir (+1 Puan)", ogeler: ["Design Systems", "Prototyping", "Basic Frontend"], ekstraMi: true }
+            ]},
+            { kod: "blockchain", baslik: "Blockchain Developer", ikon: "🔗", zorluk: "Zor", maas: "$$$$", trend: "⚖️", tavsiye: "Kripto al-sat işi değil bu. Akıllı kontrat (Smart Contract) yazma mühendisliği.", bolumler: [
+                { isim: "Kontrat Dili", ogeler: ["Solidity (Ethereum)", "Rust (Solana)"], tur: "secim" },
+                { isim: "Web3 Kütüphanesi", ogeler: ["Web3.js", "Ethers.js"], tur: "secim" },
+                { isim: "Şirketler Ekstra İsteyebilir (+1 Puan)", ogeler: ["Kriptografi", "DeFi Mantığı", "Hardhat/Truffle"], ekstraMi: true }
+            ]},
+             { kod: "embedded", baslik: "Embedded Systems Engineer", ikon: "🤖", zorluk: "Zor", maas: "$$$", trend: "⚖️", tavsiye: "Donanım ile yazılımın buluştuğu nokta. C ve C++ bu işin alfabesidir.", bolumler: [
+                { isim: "Diller", ogeler: ["C", "C++", "Assembly"], tur: "secim" },
+                { isim: "Donanım", ogeler: ["Arduino", "STM32", "Raspberry Pi", "ESP32"], tur: "secim" },
+                { isim: "Şirketler Ekstra İsteyebilir (+1 Puan)", ogeler: ["RTOS", "PCB Tasarım", "Elektronik Devre"], ekstraMi: true }
+            ]}
+        ];
+
+        let mevcutAdim = 0;
+        let puanlar = { frontend: 0, backend: 0, mobile: 0, game: 0, cyber: 0, ai: 0, qa: 0, devops: 0, uiux: 0, blockchain: 0, embedded: 0, dataeng: 0 };
+
+        function testiBaslat() {
+            soruyuGetir();
+            yolHaritasiniGoster(null); 
+        }
+
+        function soruyuGetir() {
+            const soru = sorular[mevcutAdim];
+            document.getElementById('q-counter').innerText = `SORU ${mevcutAdim + 1} / ${sorular.length}`;
+            document.getElementById('question').innerText = soru.soruMetni;
+            
+            const seceneklerKutusu = document.getElementById('options');
+            seceneklerKutusu.innerHTML = '';
+
+            const ilerleme = ((mevcutAdim) / sorular.length) * 100;
+            document.getElementById('progress').style.width = `${ilerleme}%`;
+
+            const harfler = ['A', 'B', 'C', 'D'];
+
+            soru.secenekler.forEach((secenek, indeks) => {
+                const dugme = document.createElement('button');
+                dugme.className = 'option-btn';
+                dugme.innerHTML = `<span class="option-letter">${harfler[indeks]}</span>${secenek.metin}`;
+                dugme.onclick = () => cevabiIsle(secenek.puanlar);
+                seceneklerKutusu.appendChild(dugme);
+            });
+        }
+
+        function cevabiIsle(gelenPuanlar) {
+            for (let anahtar in gelenPuanlar) {
+                if (puanlar[anahtar] !== undefined) {
+                    puanlar[anahtar] += gelenPuanlar[anahtar];
+                }
+            }
+            mevcutAdim++;
+            if (mevcutAdim < sorular.length) {
+                soruyuGetir();
+            } else {
+                testiBitir();
+            }
+        }
+
+        function testiBitir() {
+            document.getElementById('progress').style.width = '100%';
+            document.getElementById('quiz-box').style.display = 'none';
+            document.getElementById('result-box').style.display = 'block';
+            
+            const listeKapsayici = document.getElementById('accordion-list');
+            listeKapsayici.classList.add('active');
+
+            const siralanmis = Object.entries(puanlar).sort((a, b) => b[1] - a[1]);
+            const toplamPuan = siralanmis.reduce((toplam, oge) => toplam + oge[1], 0) || 1; 
+
+            const kazanan = siralanmis[0];
+            const kazananVerisi = yolHaritasiVerisi.find(r => r.kod === kazanan[0]);
+            
+            const sonucBaslik = document.getElementById('top-match');
+            sonucBaslik.innerText = kazananVerisi ? kazananVerisi.baslik : "Genel Yazılım";
+
+            const istatistikIzgarasi = document.getElementById('stats-grid');
+            siralanmis.slice(0, 4).forEach(oge => {
+                const projeAdi = yolHaritasiVerisi.find(r => r.kod === oge[0])?.baslik.replace(" Developer", "").replace(" Engineer", "") || oge[0];
+                const yuzde = Math.round((oge[1] / toplamPuan) * 100);
+                
+                if(yuzde > 0) {
+                    istatistikIzgarasi.innerHTML += `
+                        <div class="stat-item">
+                            <div class="stat-label">${projeAdi}</div>
+                            <div class="stat-value">%${yuzde}</div>
+                        </div>
+                    `;
+                }
+            });
+
+            yolHaritasiniGoster(kazanan[0]);
+        }
+
+        function testiAtla() {
+            document.getElementById('quiz-box').style.display = 'none';
+            document.getElementById('accordion-list').classList.add('active');
+            yolHaritasiniGoster(null);
+        }
+
+        function detaylaraGit() {
+            const eleman = document.getElementById('accordion-list');
+            eleman.scrollIntoView({behavior: 'smooth'});
+        }
+
+        function yolHaritasiniGoster(vurgulananKod) {
+            const kapsayici = document.getElementById('accordion-list');
+            kapsayici.innerHTML = '';
+
+            yolHaritasiVerisi.forEach(oge => {
+                const yeniEleman = document.createElement('div');
+                yeniEleman.className = 'accordion-item';
+                if(oge.kod === vurgulananKod) {
+                    yeniEleman.classList.add('highlight');
+                }
+                
+                let bolumlerHtml = '';
+                oge.bolumler.forEach(bolum => {
+                    let ogelerHtml = '';
+                    const ogeSinifi = bolum.ekstraMi ? 'tech-item bonus' : 'tech-item';
+                    
+                    bolum.ogeler.forEach((tekno, i) => {
+                        ogelerHtml += `<span class="${ogeSinifi}">${tekno}</span>`;
+                        if (i < bolum.ogeler.length - 1) {
+                            if (bolum.tur === 'sira') ogelerHtml += `<span class="flow-separator"> → </span>`;
+                            else if (bolum.tur === 'secim') ogelerHtml += `<span class="flow-separator"> / </span>`;
+                            else ogelerHtml += `<span class="flow-separator"> </span>`;
+                        }
+                    });
+
+                    let ikon = '🔹';
+                    if(bolum.ekstraMi) ikon = '✨';
+                    else if(bolum.tur === 'secim') ikon = '⚡'; 
+                    
+                    bolumlerHtml += `
+                        <div class="roadmap-group">
+                            <div class="group-title"><span>${ikon}</span> ${bolum.isim}</div>
+                            <div class="roadmap-flow">${ogelerHtml}</div>
+                        </div>
+                    `;
+                });
+
+                const zorlukSinifi = oge.zorluk === "Kolay" ? "level-easy" : (oge.zorluk === "Orta" ? "level-med" : "level-hard");
+
+                yeniEleman.innerHTML = `
+                    <div class="accordion-header" onclick="akordiyonuAcKapa(this)">
+                        <div class="header-left">
+                            <span class="icon">${oge.ikon}</span>
+                            <span>${oge.baslik}</span>
+                        </div>
+                        
+                        <div class="meta-badges">
+                            <span class="badge badge-level ${zorlukSinifi}">${oge.zorluk}</span>
+                            <span class="badge badge-salary">${oge.maas}</span>
+                            <span class="badge badge-trend">${oge.trend}</span>
+                            <span class="arrow-icon">▼</span>
+                        </div>
+                    </div>
+                    <div class="accordion-body">
+                        <div class="content">
+                            <div class="advice-box">💡 <strong style="color:white">Hoca Notu:</strong> ${oge.tavsiye}</div>
+                            ${bolumlerHtml}
+                        </div>
+                    </div>
+                `;
+                kapsayici.appendChild(yeniEleman);
+            });
+
+            if(vurgulananKod) {
+                setTimeout(() => {
+                    const hedef = document.querySelector(`.accordion-item.highlight .accordion-header`);
+                    if(hedef) akordiyonuAcKapa(hedef);
+                }, 100);
+            }
+        }
+
+        function akordiyonuAcKapa(baslik) {
+            const aktifOlan = document.querySelector('.accordion-header.active');
+            if (aktifOlan && aktifOlan !== baslik) {
+                aktifOlan.classList.remove('active');
+                aktifOlan.nextElementSibling.style.maxHeight = null;
+            }
+            baslik.classList.toggle('active');
+            const icerik = baslik.nextElementSibling;
+            icerik.style.maxHeight = icerik.style.maxHeight ? null : icerik.scrollHeight + "px";
+        }
+
+        testiBaslat();
+    </script>
+</body>
+</html>
